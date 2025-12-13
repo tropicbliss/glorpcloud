@@ -33,6 +33,7 @@ export default $config({
         route: {
           handler: {
             link: [journalTable],
+            runtime: "nodejs22.x",
           },
           args: {
             auth: { iam: true },
