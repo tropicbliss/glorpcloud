@@ -1,5 +1,5 @@
 {
-  "name": "@monorepo-template/core",
+  "name": "@glorpcloud/core",
   "type": "module",
   "version": "0.0.0",
   "scripts": {
@@ -12,7 +12,8 @@
     ]
   },
   "dependencies": {
-    "sst": "*"
+    "sst": "*",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "vitest": "^2"
