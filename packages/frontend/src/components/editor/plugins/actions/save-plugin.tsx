@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { SaveIcon } from "lucide-react";
 
-export function SavePlugin({ onSave }: { onSave: () => void }) {
+export function SavePlugin({ onSave, disabled }: { onSave: () => void, disabled: boolean }) {
     return (
         <Button
             variant={"outline"}
@@ -9,6 +9,7 @@ export function SavePlugin({ onSave }: { onSave: () => void }) {
             size="icon"
             className="size-8!"
             aria-label="Save journal"
+            disabled={disabled}
         >
             <SaveIcon />
         </Button>

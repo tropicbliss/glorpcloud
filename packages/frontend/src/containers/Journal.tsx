@@ -115,7 +115,7 @@ export function Journal() {
                     } finally {
                         setLoading(false)
                     }
-                }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} initialSerializedEditorState={content} key={content} onDelete={async () => {
+                }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} key={content} onDelete={async () => {
                     setLoading(true)
                     try {
                         API.del("glorpcloud", "/journal", {

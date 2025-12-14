@@ -28,14 +28,16 @@ export function Editor({
   onChange,
   onSerializedChange,
   readOnly = false,
-  onSave, onDelete
+  onSave, onDelete,
+  disabled
 }: {
   editorState?: EditorState
   editorSerializedState?: SerializedEditorState
   onChange?: (editorState: EditorState) => void
   onSerializedChange?: (editorSerializedState: SerializedEditorState) => void,
   readOnly: boolean,
-  onSave: () => void, onDelete: () => void
+  onSave: () => void, onDelete: () => void,
+  disabled: boolean
 }) {
   return (
     <div className="bg-background w-full overflow-hidden rounded-lg border">
@@ -50,7 +52,7 @@ export function Editor({
         }}
       >
         <TooltipProvider>
-          <Plugins onDelete={onDelete} onSave={onSave} />
+          <Plugins onDelete={onDelete} onSave={onSave} disabled={disabled} />
 
           <OnChangePlugin
             ignoreSelectionChange={true}

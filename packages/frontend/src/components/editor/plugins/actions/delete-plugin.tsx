@@ -2,11 +2,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
 
-export function DeletePlugin({ onDelete }: { onDelete: () => void }) {
+export function DeletePlugin({ onDelete, disabled }: { onDelete: () => void, disabled: boolean }) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button
+                    disabled={disabled}
                     variant={"destructive"}
                     size="icon"
                     className="size-8!"

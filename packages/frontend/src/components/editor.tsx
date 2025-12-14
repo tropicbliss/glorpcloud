@@ -3,7 +3,7 @@ import { type SerializedEditorState } from "lexical"
 
 import { Editor as InnerEditor } from "@/components/blocks/editor-00/editor"
 
-export function Editor({ initialSerializedEditorState, readOnly, onDelete, onSave }: { initialSerializedEditorState: string, readOnly: boolean, onDelete: () => void, onSave: (content: string) => void }) {
+export function Editor({ initialSerializedEditorState, readOnly, onDelete, onSave, disabled }: { initialSerializedEditorState: string, readOnly: boolean, onDelete: () => void, onSave: (content: string) => void, disabled: boolean }) {
     const [editorState, setEditorState] =
         useState<SerializedEditorState>(JSON.parse(initialSerializedEditorState) as unknown as SerializedEditorState)
 
@@ -17,6 +17,7 @@ export function Editor({ initialSerializedEditorState, readOnly, onDelete, onSav
                 onSave={() => {
                     onSave(JSON.stringify(editorState))
                 }}
+                disabled={disabled}
             />
         </div>
     )
