@@ -34,6 +34,7 @@ export default $config({
           handler: {
             link: [journalTable],
             runtime: "nodejs22.x",
+            architecture: "arm64",
           },
           args: {
             auth: { iam: true },
