@@ -8,7 +8,7 @@ const client = new DynamoDBClient();
 
 const schema = z.object({
     date: z.string().date(),
-    content: z.string(),
+    content: z.object({}).passthrough(),
 });
 
 export const main = Util.handler(async (input) => {
@@ -22,7 +22,7 @@ export const main = Util.handler(async (input) => {
             },
             UpdateExpression: "set content = :content",
             ExpressionAttributeValues: {
-                ":content": body.content,
+                ":content": JSON.stringify(body.content),
             },
         }),
     );

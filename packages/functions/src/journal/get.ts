@@ -26,5 +26,5 @@ export const main = Util.handler(async (input) => {
     if (responseData !== undefined) {
         content = responseData.content;
     }
-    return { content };
+    return { content: content && JSON.parse(content) };
 });

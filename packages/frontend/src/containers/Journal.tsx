@@ -32,7 +32,7 @@ function isMoreThanTwoDaysAgo(date: Date) {
 export function Journal() {
     const [calendarCount, setCalendarCount] = useState(1)
     const [date, setDate] = useState<Date | undefined>(new Date())
-    const [content, setContent] = useState<string | null>(null)
+    const [content, setContent] = useState<object | null>(null)
     const [loading, setLoading] = useState(false)
 
     function updateCalendarCount() {
@@ -81,7 +81,7 @@ export function Journal() {
                                 date: getDateString()
                             }
                         })
-                        setContent(JSON.stringify({
+                        setContent({
                             root: {
                                 children: [
                                     {
@@ -109,13 +109,13 @@ export function Journal() {
                                 type: "root",
                                 version: 1,
                             },
-                        }))
+                        })
                     } catch (e) {
                         onError(e)
                     } finally {
                         setLoading(false)
                     }
-                }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} key={content} onDelete={async () => {
+                }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} key={JSON.stringify(content)} onDelete={async () => {
                     setLoading(true)
                     try {
                         API.del("glorpcloud", "/journal", {
