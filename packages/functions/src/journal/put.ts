@@ -7,8 +7,8 @@ import { z } from "zod";
 const client = new DynamoDBClient();
 
 const schema = z.object({
-    date: z.string().date(),
-    content: z.object({}).passthrough(),
+    date: z.iso.date(),
+    content: z.looseObject({}),
 });
 
 export const main = Util.handler(async (input) => {

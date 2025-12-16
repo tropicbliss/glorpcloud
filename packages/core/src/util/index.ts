@@ -33,12 +33,8 @@ export namespace Util {
             } catch (error) {
                 statusCode = 400;
                 if (error instanceof ZodError) {
-                    const errors = error.errors.map((err) => ({
-                        path: err.path.join("."),
-                        message: err.message,
-                    }));
                     body = {
-                        error: errors,
+                        error: "Request shape is improper",
                     };
                 } else {
                     console.error(error);
@@ -48,7 +44,6 @@ export namespace Util {
                     };
                 }
             }
-            console.log(body);
             return {
                 body: body ? JSON.stringify(body) : "",
                 statusCode,

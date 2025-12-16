@@ -2,9 +2,7 @@
   "name": "@glorpcloud/core",
   "type": "module",
   "version": "0.0.0",
-  "scripts": {
-    "test": "sst shell vitest"
-  },
+  "scripts": {},
   "exports": {
     "./*": [
       "./src/*/index.ts",
@@ -13,9 +11,6 @@
   },
   "dependencies": {
     "sst": "*",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "vitest": "^2"
+    "zod": "^4.2.1"
   }
 }
