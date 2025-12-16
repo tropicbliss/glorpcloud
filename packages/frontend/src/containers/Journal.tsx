@@ -124,7 +124,7 @@ export function Journal() {
                             }
                         })
                         setContent(null)
-                        toast("Deleted journal entry")
+                        toast.success("Deleted journal entry")
                     } catch (e) {
                         onError(e)
                     } finally {
@@ -139,7 +139,7 @@ export function Journal() {
                                 content
                             }
                         })
-                        toast("Updated journal entry")
+                        toast.success("Updated journal entry")
                     } catch (e) {
                         onError(e)
                     } finally {

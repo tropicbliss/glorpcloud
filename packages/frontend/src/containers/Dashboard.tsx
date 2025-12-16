@@ -15,7 +15,7 @@ export default function Dashboard({ onSignout }: { onSignout: () => void }) {
     useEffect(() => {
         if (!isAuthenticated) {
             nav("/")
-            toast("Logged out")
+            toast.success("Logged out")
         }
     }, [isAuthenticated])
 

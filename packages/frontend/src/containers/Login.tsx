@@ -34,7 +34,7 @@ export default function Login({ onSuccessfulSignIn }: { onSuccessfulSignIn: () =
                     setDisableSubmit(true)
                     try {
                         await Auth.signIn(email, password)
-                        toast("Logged in")
+                        toast.success("Logged in")
                         onSuccessfulSignIn()
                     } catch (error) {
                         console.error(error)
