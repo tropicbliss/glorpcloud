@@ -37,7 +37,7 @@ export function App() {
     return (
         !isAuthenticating && (
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-                <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated } as AppContextType}>
+                <AppContext.Provider value={{ isAuthenticated } as AppContextType}>
                     <Routes>
                         <Route path='/' element={<Login onSuccessfulSignIn={() => {
                             userHasAuthenticated(true);
