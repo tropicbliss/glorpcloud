@@ -1,15 +1,14 @@
 import { useTheme } from "@/components/theme-provider"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { $isAuthenticated } from "@/lib/context"
-import { useStore } from "@nanostores/react"
 import { BookHeart, Moon, Sun, User2 } from "lucide-react"
 import { useEffect } from "react"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import glorpLogo from "@/assets/glorp.avif"
 import { toast } from "sonner"
+import { useAppContext } from "@/lib/context"
 
 export default function Dashboard({ onSignout }: { onSignout: () => void }) {
-    const isAuthenticated = useStore($isAuthenticated)
+    const { isAuthenticated } = useAppContext();
     const nav = useNavigate();
 
     useEffect(() => {

@@ -1,17 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./containers/Login";
 import { Toaster } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import { onError } from "./lib/error";
-import { $isAuthenticated, $isAuthenticating } from "./lib/context";
-import { useStore } from '@nanostores/react'
 import Dashboard from "./containers/Dashboard";
 import { ThemeProvider } from "./components/theme-provider";
 import { Journal } from "./containers/Journal";
+import { AppContext, type AppContextType } from "./lib/context";
 
 export function App() {
-    const isAuthenticating = useStore($isAuthenticating)
+    const [isAuthenticating, setIsAuthenticating] = useState(true)
+    const [isAuthenticated, userHasAuthenticated] = useState(false)
 
     useEffect(() => {
         onLoad()
@@ -20,33 +20,35 @@ export function App() {
     async function onLoad() {
         try {
             await Auth.currentSession();
-            $isAuthenticated.set(true)
+            userHasAuthenticated(true);
         } catch (error) {
             if (error !== "No current user") {
                 onError(error);
             }
         }
-        $isAuthenticating.set(false)
+        setIsAuthenticating(false)
     }
 
     async function handleLogout() {
         await Auth.signOut()
-        $isAuthenticated.set(false)
+        userHasAuthenticated(false);
     }
 
     return (
         !isAuthenticating && (
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-                <Routes>
-                    <Route path='/' element={<Login onSuccessfulSignIn={() => {
-                        $isAuthenticated.set(true)
-                    }} />} />
-                    <Route path="dashboard" element={<Dashboard onSignout={handleLogout} />}>
-                        <Route index element={<Journal />} />
-                        <Route path="journal" element={<Journal />} />
-                    </Route>
-                </Routes>
-                <Toaster />
+                <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated } as AppContextType}>
+                    <Routes>
+                        <Route path='/' element={<Login onSuccessfulSignIn={() => {
+                            userHasAuthenticated(true);
+                        }} />} />
+                        <Route path="dashboard" element={<Dashboard onSignout={handleLogout} />}>
+                            <Route index element={<Journal />} />
+                            <Route path="journal" element={<Journal />} />
+                        </Route>
+                    </Routes>
+                    <Toaster />
+                </AppContext.Provider>
             </ThemeProvider>
         )
     )

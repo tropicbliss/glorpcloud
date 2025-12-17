@@ -1,4 +1,13 @@
-import { atom } from "nanostores";
+import { createContext, useContext } from "react";
 
-export const $isAuthenticating = atom(true);
-export const $isAuthenticated = atom(false);
+export interface AppContextType {
+    isAuthenticated: boolean;
+}
+
+export const AppContext = createContext<AppContextType>({
+    isAuthenticated: false,
+});
+
+export function useAppContext() {
+    return useContext(AppContext);
+}

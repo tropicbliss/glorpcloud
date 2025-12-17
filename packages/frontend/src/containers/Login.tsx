@@ -4,15 +4,14 @@ import { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import { toast } from "sonner"
 import { onError } from "@/lib/error";
-import { useStore } from "@nanostores/react";
-import { $isAuthenticated } from "@/lib/context";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAppContext } from "@/lib/context";
 
 export default function Login({ onSuccessfulSignIn }: { onSuccessfulSignIn: () => void }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [disableSubmit, setDisableSubmit] = useState(false)
-    const isAuthenticated = useStore($isAuthenticated)
+    const { isAuthenticated } = useAppContext();
     const nav = useNavigate();
 
     useEffect(() => {
