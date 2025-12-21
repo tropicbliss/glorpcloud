@@ -8,7 +8,7 @@ export function DeletePlugin({ onDelete, disabled }: { onDelete: () => void, dis
             <AlertDialogTrigger asChild>
                 <Button
                     disabled={disabled}
-                    variant={"destructive"}
+                    variant="destructive"
                     size="icon"
                     className="size-8!"
                     aria-label="Delete journal"
