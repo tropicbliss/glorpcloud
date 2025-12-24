@@ -15,6 +15,7 @@ export default $config({
     };
   },
   async run() {
+    const isProduction = $app.stage === "production";
     const journalTable = new sst.aws.Dynamo("JournalTable", {
       fields: {
         userId: "string",
@@ -23,7 +24,7 @@ export default $config({
       primaryIndex: { hashKey: "userId", rangeKey: "entry" },
     });
     const api = new sst.aws.ApiGatewayV2("Api", {
-      domain: $app.stage === "production"
+      domain: isProduction
         ? {
           name: "api.glorpcloud.tropicbliss.net",
           dns: sst.cloudflare.dns(),
@@ -38,6 +39,24 @@ export default $config({
           },
           args: {
             auth: { iam: true },
+          },
+        },
+        api: {
+          corsConfiguration: {
+            allowCredentials: true,
+            allowHeaders: [
+              "authorization",
+              "content-type",
+              "x-amz-date",
+              "X-amz-security-token",
+            ],
+            allowMethods: ["GET", "POST", "PUT", "DELETE"],
+            allowOrigins: [
+              isProduction
+                ? "https://glorpcloud.tropicbliss.net"
+                : "http://localhost:5173",
+            ],
+            maxAge: isProduction ? 86400 : 300,
           },
         },
       },
