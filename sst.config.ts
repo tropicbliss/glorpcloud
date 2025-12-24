@@ -24,12 +24,11 @@ export default $config({
       primaryIndex: { hashKey: "userId", rangeKey: "entry" },
     });
     const api = new sst.aws.ApiGatewayV2("Api", {
-      domain: isProduction
-        ? {
+      domain: isProduction &&
+        {
           name: "api.glorpcloud.tropicbliss.net",
           dns: sst.cloudflare.dns(),
-        }
-        : undefined,
+        },
       transform: {
         route: {
           handler: {
