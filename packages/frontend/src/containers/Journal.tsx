@@ -43,7 +43,7 @@ export function Journal() {
     const [loading, setLoading] = useState(false)
 
     const params = useParams()
-    const date = params.date ? new Date(params.date) : new Date()
+    const date = new Date(params.date ?? new Date())
 
     function updateCalendarCount() {
         setCalendarCount(getCalendarCount())
