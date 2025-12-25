@@ -9,7 +9,6 @@ export function Editor({ initialSerializedEditorState, readOnly, onDelete, onSav
     const [previousEditorState, setPreviousEditorState] = useState(JSON.stringify(initialSerializedEditorState))
     const editorStateHasChanged = JSON.stringify(editorState) !== previousEditorState
 
-
     return (
         <div>
             <InnerEditor
