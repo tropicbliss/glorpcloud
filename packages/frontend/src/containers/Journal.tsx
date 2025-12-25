@@ -69,10 +69,8 @@ export function Journal() {
     return (
         <div className="space-y-3 p-3 w-full">
             <div className="flex justify-center">
-                <Calendar disabled={loading} mode="single" numberOfMonths={calendarCount} selected={date} onSelect={(date) => {
-                    if (date) {
-                        window.location.href = `/dashboard/journal/${getDateString(date)}`
-                    }
+                <Calendar disabled={loading} mode="single" numberOfMonths={calendarCount} selected={date} onSelect={(selectedDate) => {
+                    window.location.href = `/dashboard/journal/${getDateString(selectedDate ?? date)}`
                 }} captionLayout="dropdown" defaultMonth={getDefaultMonth()} className="rounded-lg border shadow-sm" />
             </div>
             {content === null ? <EmptyEntry selectedDate={date} disabled={loading} onClick={async () => {
