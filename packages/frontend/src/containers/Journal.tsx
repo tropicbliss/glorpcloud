@@ -4,6 +4,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { onError } from "@/lib/error";
 import { API } from "aws-amplify";
 import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 function getCalendarCount() {
@@ -29,21 +30,23 @@ function isMoreThanTwoDaysAgo(date: Date) {
     return date < threeDaysAgo
 }
 
+function getDateString(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 export function Journal() {
     const [calendarCount, setCalendarCount] = useState(1)
-    const [date, setDate] = useState<Date | undefined>(new Date())
+    const params = useParams()
+    const [date, setDate] = useState<Date | undefined>(params.date ? new Date(params.date) : new Date())
     const [content, setContent] = useState<object | null>(null)
     const [loading, setLoading] = useState(false)
+    const nav = useNavigate();
 
     function updateCalendarCount() {
         setCalendarCount(getCalendarCount())
-    }
-
-    function getDateString() {
-        const year = date!.getFullYear();
-        const month = String(date!.getMonth() + 1).padStart(2, '0');
-        const day = String(date!.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
     }
 
     function getDefaultMonth() {
@@ -62,8 +65,9 @@ export function Journal() {
 
     useEffect(() => {
         if (date) {
+            nav(`/dashboard/journal/${getDateString(date)}`)
             setLoading(true)
-            API.get("glorpcloud", `/journal/${getDateString()}`, {}).then((res) => setContent(res.content)).catch((e) => onError(e)).finally(() => setLoading(false))
+            API.get("glorpcloud", `/journal/${getDateString(date)}`, {}).then((res) => setContent(res.content)).catch((e) => onError(e)).finally(() => setLoading(false))
         }
     }, [date])
 
@@ -78,7 +82,7 @@ export function Journal() {
                     try {
                         await API.post("glorpcloud", "/journal", {
                             body: {
-                                date: getDateString()
+                                date: getDateString(date)
                             }
                         })
                         setContent({
@@ -120,7 +124,7 @@ export function Journal() {
                     try {
                         API.del("glorpcloud", "/journal", {
                             body: {
-                                date: getDateString()
+                                date: getDateString(date)
                             }
                         })
                         setContent(null)
@@ -135,7 +139,7 @@ export function Journal() {
                     try {
                         API.put("glorpcloud", "/journal", {
                             body: {
-                                date: getDateString(),
+                                date: getDateString(date),
                                 content
                             }
                         })

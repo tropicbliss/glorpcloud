@@ -45,6 +45,7 @@ export function App() {
                         <Route path="dashboard" element={<Dashboard onSignout={handleLogout} />}>
                             <Route index element={<Journal />} />
                             <Route path="journal" element={<Journal />} />
+                            <Route path="journal/:date" element={<Journal />} />
                         </Route>
                     </Routes>
                     <Toaster />
