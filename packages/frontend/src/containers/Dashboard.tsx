@@ -1,6 +1,6 @@
 import { useTheme } from "@/components/theme-provider"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { BookHeart, Moon, Sun, User2 } from "lucide-react"
+import { BookHeart, GitGraph, Moon, Sun, User2 } from "lucide-react"
 import { useEffect } from "react"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import glorpLogo from "@/assets/glorp.avif"
@@ -91,6 +91,14 @@ function AppSidebar({ onSignout }: { onSignout: () => void }) {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <a href="https://github.com/tropicbliss/glorpcloud" target="_blank">
+                                <GitGraph />
+                                <span>GitHub</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={toggleTheme}>
                             {currentThemeButton()}
