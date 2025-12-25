@@ -9,6 +9,10 @@ declare module "sst" {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
+    "ChecklistTable": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "Frontend": {
       "type": "sst.aws.StaticSite"
       "url": string

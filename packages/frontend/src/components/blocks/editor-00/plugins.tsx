@@ -37,7 +37,7 @@ import { EditModeTogglePlugin } from "@/components/editor/plugins/actions/edit-m
 import { SavePlugin } from "@/components/editor/plugins/actions/save-plugin"
 import { DeletePlugin } from "@/components/editor/plugins/actions/delete-plugin"
 
-export function Plugins({ onSave, onDelete, disabled }: { onSave: () => void, onDelete: () => void, disabled: boolean }) {
+export function Plugins({ onSave, onDelete, disabled, disableSaveButton }: { onSave: () => void, onDelete: () => void, disabled: boolean, disableSaveButton: boolean }) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null)
 
@@ -111,7 +111,7 @@ export function Plugins({ onSave, onDelete, disabled }: { onSave: () => void, on
           </div>
           <div className="flex flex-1 justify-end gap-2">
             <DeletePlugin onDelete={onDelete} disabled={disabled} />
-            <SavePlugin onSave={onSave} disabled={disabled} />
+            <SavePlugin onSave={onSave} disabled={disabled || disableSaveButton} />
           </div>
         </div>
       </ActionsPlugin>
