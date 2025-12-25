@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { onError } from "@/lib/error";
 import { API } from "aws-amplify";
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 function getCalendarCount() {
@@ -39,11 +39,11 @@ function getDateString(date: Date) {
 
 export function Journal() {
     const [calendarCount, setCalendarCount] = useState(1)
-    const params = useParams()
-    const [date, setDate] = useState<Date | undefined>(params.date ? new Date(params.date) : new Date())
     const [content, setContent] = useState<object | null>(null)
     const [loading, setLoading] = useState(false)
-    const nav = useNavigate();
+
+    const params = useParams()
+    const date = params.date ? new Date(params.date) : new Date()
 
     function updateCalendarCount() {
         setCalendarCount(getCalendarCount())
@@ -61,96 +61,93 @@ export function Journal() {
         window.addEventListener("resize", () => {
             updateCalendarCount()
         })
-    }, [])
 
-    useEffect(() => {
-        if (date) {
-            nav(`/dashboard/journal/${getDateString(date)}`)
-            setLoading(true)
-            API.get("glorpcloud", `/journal/${getDateString(date)}`, {}).then((res) => setContent(res.content)).catch((e) => onError(e)).finally(() => setLoading(false))
-        }
-    }, [date])
+        setLoading(true)
+        API.get("glorpcloud", `/journal/${getDateString(date)}`, {}).then((res) => setContent(res.content)).catch((e) => onError(e)).finally(() => setLoading(false))
+    }, [])
 
     return (
         <div className="space-y-3 p-3 w-full">
             <div className="flex justify-center">
-                <Calendar disabled={loading} mode="single" numberOfMonths={calendarCount} selected={date} onSelect={setDate} captionLayout="dropdown" defaultMonth={getDefaultMonth()} className="rounded-lg border shadow-sm" />
+                <Calendar disabled={loading} mode="single" numberOfMonths={calendarCount} selected={date} onSelect={(date) => {
+                    if (date) {
+                        window.location.href = `/dashboard/journal/${getDateString(date)}`
+                    }
+                }} captionLayout="dropdown" defaultMonth={getDefaultMonth()} className="rounded-lg border shadow-sm" />
             </div>
-            {date ?
-                content === null ? <EmptyEntry selectedDate={date} disabled={loading} onClick={async () => {
-                    setLoading(true)
-                    try {
-                        await API.post("glorpcloud", "/journal", {
-                            body: {
-                                date: getDateString(date)
-                            }
-                        })
-                        setContent({
-                            root: {
-                                children: [
-                                    {
-                                        children: [
-                                            {
-                                                detail: 0,
-                                                format: 0,
-                                                mode: "normal",
-                                                style: "",
-                                                text: "",
-                                                type: "text",
-                                                version: 1,
-                                            },
-                                        ],
-                                        direction: "ltr",
-                                        format: "",
-                                        indent: 0,
-                                        type: "paragraph",
-                                        version: 1,
-                                    },
-                                ],
-                                direction: "ltr",
-                                format: "",
-                                indent: 0,
-                                type: "root",
-                                version: 1,
-                            },
-                        })
-                    } catch (e) {
-                        onError(e)
-                    } finally {
-                        setLoading(false)
-                    }
-                }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} key={JSON.stringify(content)} onDelete={async () => {
-                    setLoading(true)
-                    try {
-                        API.del("glorpcloud", "/journal", {
-                            body: {
-                                date: getDateString(date)
-                            }
-                        })
-                        setContent(null)
-                        toast.success("Deleted journal entry")
-                    } catch (e) {
-                        onError(e)
-                    } finally {
-                        setLoading(false)
-                    }
-                }} onSave={async (content) => {
-                    setLoading(true)
-                    try {
-                        API.put("glorpcloud", "/journal", {
-                            body: {
-                                date: getDateString(date),
-                                content
-                            }
-                        })
-                        toast.success("Updated journal entry")
-                    } catch (e) {
-                        onError(e)
-                    } finally {
-                        setLoading(false)
-                    }
-                }} />
-                : <></>}
+            {content === null ? <EmptyEntry selectedDate={date} disabled={loading} onClick={async () => {
+                setLoading(true)
+                try {
+                    await API.post("glorpcloud", "/journal", {
+                        body: {
+                            date: getDateString(date)
+                        }
+                    })
+                    setContent({
+                        root: {
+                            children: [
+                                {
+                                    children: [
+                                        {
+                                            detail: 0,
+                                            format: 0,
+                                            mode: "normal",
+                                            style: "",
+                                            text: "",
+                                            type: "text",
+                                            version: 1,
+                                        },
+                                    ],
+                                    direction: "ltr",
+                                    format: "",
+                                    indent: 0,
+                                    type: "paragraph",
+                                    version: 1,
+                                },
+                            ],
+                            direction: "ltr",
+                            format: "",
+                            indent: 0,
+                            type: "root",
+                            version: 1,
+                        },
+                    })
+                } catch (e) {
+                    onError(e)
+                } finally {
+                    setLoading(false)
+                }
+            }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} onDelete={async () => {
+                setLoading(true)
+                try {
+                    API.del("glorpcloud", "/journal", {
+                        body: {
+                            date: getDateString(date)
+                        }
+                    })
+                    setContent(null)
+                    toast.success("Deleted journal entry")
+                } catch (e) {
+                    onError(e)
+                } finally {
+                    setLoading(false)
+                }
+            }} onSave={async (content) => {
+                setLoading(true)
+                try {
+                    API.put("glorpcloud", "/journal", {
+                        body: {
+                            date: getDateString(date),
+                            content
+                        }
+                    })
+                    toast.success("Updated journal entry")
+                } catch (e) {
+                    onError(e)
+                } finally {
+                    setLoading(false)
+                }
+            }} />}
         </div>
     )
 }

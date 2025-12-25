@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { type SerializedEditorState } from "lexical"
 
 import { Editor as InnerEditor } from "@/components/blocks/editor-00/editor"
@@ -8,6 +8,21 @@ export function Editor({ initialSerializedEditorState, readOnly, onDelete, onSav
         useState<SerializedEditorState>(initialSerializedEditorState as unknown as SerializedEditorState)
     const [previousEditorState, setPreviousEditorState] = useState(JSON.stringify(initialSerializedEditorState))
     const editorStateHasChanged = JSON.stringify(editorState) !== previousEditorState
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            if (editorStateHasChanged) {
+                event.preventDefault();
+                return 'You have unsaved changes. Are you sure you want to leave?';
+            }
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload)
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload)
+        }
+    }, [editorStateHasChanged])
 
     return (
         <div>
