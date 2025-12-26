@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.952.0",
-    "@aws-sdk/lib-dynamodb": "^3.952.0",
+    "@aws-sdk/client-dynamodb": "^3.958.0",
+    "@aws-sdk/lib-dynamodb": "^3.958.0",
     "@glorpcloud/core": "*",
-    "sst": "*",
+    "sst": "3.17.25",
     "zod": "^4.2.1"
   },
   "devDependencies": {
