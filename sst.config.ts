@@ -33,8 +33,9 @@ export default $config({
         route: {
           handler: {
             link: [journalTable],
-            runtime: "nodejs22.x",
+            runtime: "go",
             architecture: "arm64",
+            memory: "128 MB",
           },
           args: {
             auth: { iam: true },
@@ -60,30 +61,18 @@ export default $config({
         },
       },
     });
-    api.route(
-      "DELETE /journal",
-      {
-        handler: "packages/functions/src/journal/delete.main",
-      },
-    );
-    api.route(
-      "GET /journal/{date}",
-      {
-        handler: "packages/functions/src/journal/get.main",
-      },
-    );
-    api.route(
-      "POST /journal",
-      {
-        handler: "packages/functions/src/journal/post.main",
-      },
-    );
-    api.route(
-      "PUT /journal",
-      {
-        handler: "packages/functions/src/journal/put.main",
-      },
-    );
+    api.route("DELETE /journal", {
+      handler: "./packages/functions",
+    });
+    api.route("GET /journal/{date}", {
+      handler: "./packages/functions",
+    });
+    api.route("POST /journal", {
+      handler: "./packages/functions",
+    });
+    api.route("PUT /journal", {
+      handler: "./packages/functions",
+    });
     const region = aws.getRegionOutput().name;
     const userPool = new sst.aws.CognitoUserPool("UserPool", {
       usernames: ["email"],
