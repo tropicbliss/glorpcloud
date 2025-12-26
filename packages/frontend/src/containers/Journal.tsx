@@ -110,6 +110,7 @@ export function Journal() {
                             version: 1,
                         },
                     })
+                    toast.success("Created journal entry")
                 } catch (e) {
                     onError(e)
                 } finally {
