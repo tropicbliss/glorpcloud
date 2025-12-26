@@ -8,6 +8,7 @@ import Dashboard from "./containers/Dashboard";
 import { ThemeProvider } from "./components/theme-provider";
 import { Journal } from "./containers/Journal";
 import { AppContext, type AppContextType } from "./lib/context";
+import { FourOhFour } from "./containers/FourOhFour";
 
 export function App() {
     const [isAuthenticating, setIsAuthenticating] = useState(true)
@@ -47,6 +48,7 @@ export function App() {
                             <Route path="journal" element={<Journal />} />
                             <Route path="journal/:date" element={<Journal />} />
                         </Route>
+                        <Route path="*" element={<FourOhFour />} />
                     </Routes>
                     <Toaster />
                 </AppContext.Provider>

@@ -23,13 +23,6 @@ export default $config({
       },
       primaryIndex: { hashKey: "userId", rangeKey: "entry" },
     });
-    const checklistTable = new sst.aws.Dynamo("ChecklistTable", {
-      fields: {
-        userId: "string",
-        id: "string",
-      },
-      primaryIndex: { hashKey: "userId", rangeKey: "id" },
-    });
     const api = new sst.aws.ApiGatewayV2("Api", {
       domain: isProduction &&
         {
@@ -39,7 +32,7 @@ export default $config({
       transform: {
         route: {
           handler: {
-            link: [journalTable, checklistTable],
+            link: [journalTable],
             runtime: "nodejs22.x",
             architecture: "arm64",
           },
