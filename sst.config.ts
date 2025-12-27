@@ -40,6 +40,7 @@ export default $config({
           args: {
             auth: { iam: true },
           },
+        },
         api: {
           corsConfiguration: {
             allowCredentials: true,
@@ -60,16 +61,16 @@ export default $config({
         },
       },
     });
-    api.route("GET /journal" {
+    api.route("GET /journal/{date}", {
       handler: "./packages/functions",
     });
-    api.route("POST /journal" {
+    api.route("POST /journal", {
       handler: "./packages/functions",
     });
-    api.route("PUT /journal" {
+    api.route("PUT /journal", {
       handler: "./packages/functions",
     });
-    api.route("DELETE /journal" {
+    api.route("DELETE /journal", {
       handler: "./packages/functions",
     });
     const region = aws.getRegionOutput().name;
