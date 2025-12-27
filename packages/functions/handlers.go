@@ -23,7 +23,7 @@ func invalidJson(w http.ResponseWriter) {
 
 func extractUserId(r *http.Request) string {
 	userId, ok := r.Context().Value("userId").(string)
-	if !ok {
+	if !ok || userId == "" {
 		panic("user id is somehow not provided by the api gateway")
 	}
 	return userId
