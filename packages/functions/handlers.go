@@ -29,7 +29,7 @@ func extractUserId(r *http.Request) string {
 	return userId
 }
 
-func verifyDate(dateStr string) bool {
+func isValidDate(dateStr string) bool {
 	_, err := time.Parse("2006-01-02", dateStr)
 	return err == nil
 }
@@ -52,7 +52,7 @@ func getPayload(w http.ResponseWriter, r *http.Request) *JournalPayload {
 		invalidJson(w)
 		return nil
 	}
-	ok := verifyDate(req.Date)
+	ok := isValidDate(req.Date)
 	if !ok {
 		invalidJson(w)
 		return nil
@@ -77,8 +77,7 @@ func newJournalHandler() JournalHandler {
 func (h *JournalHandler) get(w http.ResponseWriter, r *http.Request) {
 	userId := extractUserId(r)
 	date := r.PathValue("date")
-	isDateValid := verifyDate(date)
-	if !isDateValid {
+	if !isValidDate(date) {
 		invalidJson(w)
 		return
 	}
