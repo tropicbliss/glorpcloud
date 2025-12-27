@@ -60,9 +60,11 @@ export default $config({
     });
     api.route("OPTIONS /{proxy+}", {
       handler: "./packages/functions-stub",
+      name: `functions-stub-${$app.stage}`,
     });
     api.route("$default", {
       handler: "./packages/functions",
+      name: `functions-${$app.stage}`,
     }, {
       auth: { iam: true },
     });
