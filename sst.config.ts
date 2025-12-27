@@ -58,15 +58,17 @@ export default $config({
         },
       },
     });
-    api.route("OPTIONS /{proxy+}", {
-      handler: "./packages/functions-stub",
-      name: `functions-stub-${$app.stage}`,
-    });
-    api.route("$default", {
+    api.route("GET /journal" {
       handler: "./packages/functions",
-      name: `functions-${$app.stage}`,
-    }, {
-      auth: { iam: true },
+    });
+    api.route("POST /journal" {
+      handler: "./packages/functions",
+    });
+    api.route("PUT /journal" {
+      handler: "./packages/functions",
+    });
+    api.route("DELETE /journal" {
+      handler: "./packages/functions",
     });
     const region = aws.getRegionOutput().name;
     const userPool = new sst.aws.CognitoUserPool("UserPool", {
