@@ -37,9 +37,6 @@ export default $config({
             architecture: "arm64",
             memory: "128 MB",
           },
-          args: {
-            auth: { iam: true },
-          },
         },
         api: {
           corsConfiguration: {
@@ -61,17 +58,13 @@ export default $config({
         },
       },
     });
-    api.route("DELETE /journal", {
-      handler: "./packages/functions",
+    api.route("OPTIONS /{proxy+}", {
+      handler: "./packages/functions-stub",
     });
-    api.route("GET /journal/{date}", {
+    api.route("$default", {
       handler: "./packages/functions",
-    });
-    api.route("POST /journal", {
-      handler: "./packages/functions",
-    });
-    api.route("PUT /journal", {
-      handler: "./packages/functions",
+    }, {
+      auth: { iam: true },
     });
     const region = aws.getRegionOutput().name;
     const userPool = new sst.aws.CognitoUserPool("UserPool", {

@@ -1,4 +1,4 @@
-module functions-go
+module functions
 
 go 1.25.5
 

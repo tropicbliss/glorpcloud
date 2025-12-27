@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -77,8 +76,6 @@ func newJournalHandler() JournalHandler {
 
 func (h *JournalHandler) get(w http.ResponseWriter, r *http.Request) {
 	userId := extractUserId(r)
-	fmt.Println("Hello")
-	fmt.Println(userId)
 	date := r.PathValue("date")
 	isDateValid := verifyDate(date)
 	if !isDateValid {
