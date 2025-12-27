@@ -37,7 +37,9 @@ export default $config({
             architecture: "arm64",
             memory: "128 MB",
           },
-        },
+          args: {
+            auth: { iam: true },
+          },
         api: {
           corsConfiguration: {
             allowCredentials: true,
