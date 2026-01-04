@@ -9,15 +9,18 @@ import (
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	encoder := json.NewEncoder(w)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Clacks-Overhead", "GNU Terry Pratchett")
 	w.WriteHeader(code)
 	encoder.Encode(payload)
 }
 
 func respondWithSuccess(w http.ResponseWriter) {
+	w.Header().Set("X-Clacks-Overhead", "GNU Terry Pratchett")
 	w.WriteHeader(http.StatusOK)
 }
 
 func invalidJson(w http.ResponseWriter) {
+	w.Header().Set("X-Clacks-Overhead", "GNU Terry Pratchett")
 	http.Error(w, "Invalid JSON", http.StatusBadRequest)
 }
 
