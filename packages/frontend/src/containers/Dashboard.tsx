@@ -2,7 +2,7 @@ import { useTheme } from "@/components/theme-provider"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { BookHeart, GitGraph, Moon, Sun, User2 } from "lucide-react"
 import { useEffect } from "react"
-import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import glorpLogo from "@/assets/glorp.avif"
 import { toast } from "sonner"
 import { useAppContext } from "@/lib/context"
@@ -62,10 +62,10 @@ function AppSidebar({ onSignout }: { onSignout: () => void }) {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
-                            <NavLink to="/dashboard">
+                            <a href="/dashboard">
                                 <img src={glorpLogo} className="size-5!" />
                                 <span className="text-base font-semibold">glorpcloud</span>
-                            </NavLink>
+                            </a>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -78,10 +78,10 @@ function AppSidebar({ onSignout }: { onSignout: () => void }) {
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
-                                        <NavLink to={item.url}>
+                                        <a href={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </NavLink>
+                                        </a>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
