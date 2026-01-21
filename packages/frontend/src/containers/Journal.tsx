@@ -6,6 +6,8 @@ import { API } from "aws-amplify";
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircleIcon } from "lucide-react"
 
 function getCalendarCount() {
     const width = window.innerWidth
@@ -41,6 +43,7 @@ export function Journal() {
     const [calendarCount, setCalendarCount] = useState(1)
     const [content, setContent] = useState<object | null>(null)
     const [loading, setLoading] = useState(false)
+    const [isError, setIsError] = useState(false)
 
     const params = useParams()
     const date = new Date(params.date ?? new Date())
@@ -63,7 +66,10 @@ export function Journal() {
         })
 
         setLoading(true)
-        API.get("glorpcloud", `/journal/${getDateString(date)}`, {}).then((res) => setContent(res.content)).catch((e) => onError(e)).finally(() => setLoading(false))
+        API.get("glorpcloud", `/journal/${getDateString(date)}`, {}).then((res) => setContent(res.content)).catch((e) => {
+            onError(e)
+            setIsError(true)
+        }).finally(() => setLoading(false))
     }, [])
 
     return (
@@ -73,80 +79,88 @@ export function Journal() {
                     window.location.href = `/dashboard/journal/${getDateString(selectedDate ?? date)}`
                 }} captionLayout="dropdown" defaultMonth={getDefaultMonth()} className="rounded-lg border shadow-sm" />
             </div>
-            {content === null ? <EmptyEntry selectedDate={date} disabled={loading} onClick={async () => {
-                setLoading(true)
-                try {
-                    await API.post("glorpcloud", "/journal", {
-                        body: {
-                            date: getDateString(date)
-                        }
-                    })
-                    setContent({
-                        root: {
-                            children: [
-                                {
-                                    children: [
-                                        {
-                                            detail: 0,
-                                            format: 0,
-                                            mode: "normal",
-                                            style: "",
-                                            text: "",
-                                            type: "text",
-                                            version: 1,
-                                        },
-                                    ],
-                                    direction: "ltr",
-                                    format: "",
-                                    indent: 0,
-                                    type: "paragraph",
-                                    version: 1,
-                                },
-                            ],
-                            direction: "ltr",
-                            format: "",
-                            indent: 0,
-                            type: "root",
-                            version: 1,
-                        },
-                    })
-                    toast.success("Created journal entry")
-                } catch (e) {
-                    onError(e)
-                } finally {
-                    setLoading(false)
-                }
-            }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} onDelete={async () => {
-                setLoading(true)
-                try {
-                    API.del("glorpcloud", "/journal", {
-                        body: {
-                            date: getDateString(date)
-                        }
-                    })
-                    setContent(null)
-                    toast.success("Deleted journal entry")
-                } catch (e) {
-                    onError(e)
-                } finally {
-                    setLoading(false)
-                }
-            }} onSave={async (content) => {
-                setLoading(true)
-                try {
-                    API.put("glorpcloud", "/journal", {
-                        body: {
-                            date: getDateString(date),
-                            content
-                        }
-                    })
-                    toast.success("Updated journal entry")
-                } catch (e) {
-                    onError(e)
-                } finally {
-                    setLoading(false)
-                }
-            }} />}
+            {isError ? <Alert variant="destructive" className="">
+                <AlertCircleIcon />
+                <AlertTitle>Page load failed</AlertTitle>
+                <AlertDescription>
+                    An error occurred while loading the page. Please click on the calendar above and try again.
+                </AlertDescription>
+            </Alert> : <>
+                {content === null ? <EmptyEntry selectedDate={date} disabled={loading} onClick={async () => {
+                    setLoading(true)
+                    try {
+                        await API.post("glorpcloud", "/journal", {
+                            body: {
+                                date: getDateString(date)
+                            }
+                        })
+                        setContent({
+                            root: {
+                                children: [
+                                    {
+                                        children: [
+                                            {
+                                                detail: 0,
+                                                format: 0,
+                                                mode: "normal",
+                                                style: "",
+                                                text: "",
+                                                type: "text",
+                                                version: 1,
+                                            },
+                                        ],
+                                        direction: "ltr",
+                                        format: "",
+                                        indent: 0,
+                                        type: "paragraph",
+                                        version: 1,
+                                    },
+                                ],
+                                direction: "ltr",
+                                format: "",
+                                indent: 0,
+                                type: "root",
+                                version: 1,
+                            },
+                        })
+                        toast.success("Created journal entry")
+                    } catch (e) {
+                        onError(e)
+                    } finally {
+                        setLoading(false)
+                    }
+                }} /> : <Editor readOnly={isMoreThanTwoDaysAgo(date)} disabled={loading} initialSerializedEditorState={content} onDelete={async () => {
+                    setLoading(true)
+                    try {
+                        API.del("glorpcloud", "/journal", {
+                            body: {
+                                date: getDateString(date)
+                            }
+                        })
+                        setContent(null)
+                        toast.success("Deleted journal entry")
+                    } catch (e) {
+                        onError(e)
+                    } finally {
+                        setLoading(false)
+                    }
+                }} onSave={async (content) => {
+                    setLoading(true)
+                    try {
+                        API.put("glorpcloud", "/journal", {
+                            body: {
+                                date: getDateString(date),
+                                content
+                            }
+                        })
+                        toast.success("Updated journal entry")
+                    } catch (e) {
+                        onError(e)
+                    } finally {
+                        setLoading(false)
+                    }
+                }} />}
+            </>}
         </div>
     )
 }
