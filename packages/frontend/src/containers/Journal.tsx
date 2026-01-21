@@ -79,7 +79,7 @@ export function Journal() {
                     window.location.href = `/dashboard/journal/${getDateString(selectedDate ?? date)}`
                 }} captionLayout="dropdown" defaultMonth={getDefaultMonth()} className="rounded-lg border shadow-sm" />
             </div>
-            {isError ? <Alert variant="destructive" className="">
+            {isError ? <Alert variant="destructive">
                 <AlertCircleIcon />
                 <AlertTitle>Page load failed</AlertTitle>
                 <AlertDescription>
